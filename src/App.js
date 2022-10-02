@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './components/Navbar';
 import News from './components/News';
+import Footer from './components/Footer';
 
 
 class App extends Component {
@@ -9,6 +10,7 @@ class App extends Component {
       <div>
         <Navbar />
         <News/>
+        <Footer />
       </div>
     );
   }
