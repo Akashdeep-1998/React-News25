@@ -28,8 +28,15 @@ class News extends Component {
     return (
       <div>
         <div className="container my-3">
-          <h1 className="text-center mb-2"> NewsBites - Top Headlines</h1>
-          <hr />
+          <h1 className="text-center my-3">
+            {" "}
+            News25 &#8211;{" "}
+            {this.props.category === "all"
+              ? "Latest 25 News"
+              : "Latest 25 "+this.props.category[0].toUpperCase() +
+                this.props.category.substring(1) +
+                " News"}
+          </h1>
           {!this.state.loading && <Spinner />}
           <div className="row">
             {this.state.articles.map((news) => {
@@ -39,7 +46,10 @@ class News extends Component {
                     title={news.title.slice(0, 58)}
                     description={news.content.slice(0, 100)}
                     imageUrl={news.imageUrl}
-                    newsUrl={news.readMoreUrl}
+                    newsUrl={!news.readMoreUrl ? news.url : news.readMoreUrl}
+                    author={news.author}
+                    publishedDate={(news.date).slice(0,news.date.indexOf(","))}
+                    publishedTime={news.time}
                   />
                 </div>
               );
