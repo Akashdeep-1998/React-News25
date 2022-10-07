@@ -13,17 +13,29 @@ class News extends Component {
   }
 
   componentDidMount() {
+    this.props.setProgress(25);
     fetch(`https://inshorts.deta.dev/news?category=${this.props.category}`)
-      .then((data) => data.json())
+      .then((data) => {
+        this.props.setProgress(50);
+        return data.json();
+      })
       .then((newsData) => {
         console.log(newsData);
+        this.props.setProgress(75);
         this.setState({
           articles: newsData.data,
           loading: newsData.success,
         });
+        this.props.setProgress(100);
       });
+    document.title = `News25 - ${this.props.category === "all"
+      ? "Get Your Daily News Free"
+      : this.props.category[0].toUpperCase() +
+      this.props.category.substring(1) +
+      " News"
+      }`;
   }
-
+  akash = () => { }
   render() {
     return (
       <div>
@@ -33,9 +45,10 @@ class News extends Component {
             News25 &#8211;{" "}
             {this.props.category === "all"
               ? "Latest 25 News"
-              : "Latest 25 "+this.props.category[0].toUpperCase() +
-                this.props.category.substring(1) +
-                " News"}
+              : "Latest 25 " +
+              this.props.category[0].toUpperCase() +
+              this.props.category.substring(1) +
+              " News"}
           </h1>
           {!this.state.loading && <Spinner />}
           <div className="row">
@@ -48,7 +61,7 @@ class News extends Component {
                     imageUrl={news.imageUrl}
                     newsUrl={!news.readMoreUrl ? news.url : news.readMoreUrl}
                     author={news.author}
-                    publishedDate={(news.date).slice(0,news.date.indexOf(","))}
+                    publishedDate={news.date.slice(0, news.date.indexOf(","))}
                     publishedTime={news.time}
                   />
                 </div>

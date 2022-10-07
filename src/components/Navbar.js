@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class Navbar extends Component {
+
   render() {
     return (
       <div>
+
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
           <div className="container-fluid">
             <Link className="navbar-brand fs-3" to="/">

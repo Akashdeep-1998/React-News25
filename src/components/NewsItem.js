@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 class NewsItem extends Component {
   render() {
     const {
@@ -14,13 +14,9 @@ class NewsItem extends Component {
       <div className="my-3">
         <div className="card">
           <img
-            src={
-              !imageUrl
-                ? "https://petpack.com.au/wp-content/uploads/2021/11/newsbites2-400x250.png"
-                : imageUrl
-            }
-            height="191px"
-            width="286px"
+            src={imageUrl}
+            height="240px"
+            width="120px"
             className="card-img-top"
             alt=""
           />
