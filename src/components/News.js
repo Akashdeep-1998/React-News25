@@ -1,78 +1,69 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import Footer from "./Footer";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 
-class News extends Component {
-  constructor() {
-    super();
-    this.state = {
-      articles: [],
-      loading: false,
-    };
-  }
+const News = (props) => {
 
-  componentDidMount() {
-    this.props.setProgress(25);
-    fetch(`https://inshorts.deta.dev/news?category=${this.props.category}`)
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    props.setProgress(25);
+    fetch(`https://inshorts.deta.dev/news?category=${props.category}`)
       .then((data) => {
-        this.props.setProgress(50);
+        props.setProgress(50);
         return data.json();
       })
       .then((newsData) => {
-        console.log(newsData);
-        this.props.setProgress(75);
-        this.setState({
-          articles: newsData.data,
-          loading: newsData.success,
-        });
-        this.props.setProgress(100);
+        props.setProgress(75);
+        setArticles(newsData.data);
+        setLoading(newsData.success)
+        props.setProgress(100);
       });
-    document.title = `News25 - ${this.props.category === "all"
+    document.title = `News25 - ${props.category === "all"
       ? "Get Your Daily News Free"
-      : this.props.category[0].toUpperCase() +
-      this.props.category.substring(1) +
+      : props.category[0].toUpperCase() +
+      props.category.substring(1) +
       " News"
       }`;
-  }
-  akash = () => { }
-  render() {
-    return (
-      <div>
-        <div className="container my-3">
-          <h1 className="text-center my-3">
-            {" "}
-            News25 &#8211;{" "}
-            {this.props.category === "all"
-              ? "Latest 25 News"
-              : "Latest 25 " +
-              this.props.category[0].toUpperCase() +
-              this.props.category.substring(1) +
-              " News"}
-          </h1>
-          {!this.state.loading && <Spinner />}
-          <div className="row">
-            {this.state.articles.map((news) => {
-              return (
-                <div className="col-md-4" key={news.id}>
-                  <NewsItem
-                    title={news.title.slice(0, 58)}
-                    description={news.content.slice(0, 100)}
-                    imageUrl={news.imageUrl}
-                    newsUrl={!news.readMoreUrl ? news.url : news.readMoreUrl}
-                    author={news.author}
-                    publishedDate={news.date.slice(0, news.date.indexOf(","))}
-                    publishedTime={news.time}
-                  />
-                </div>
-              );
-            })}
-          </div>
+  },[]);
+
+  return (
+    <div>
+      <div className="container my-3">
+        <h1 className="text-center" style={{marginTop:'90px', marginBottom:'18px'}}>
+          {" "}
+          News25 &#8211;{" "}
+          {props.category === "all"
+            ? "Latest 25 News"
+            : "Latest 25 " +
+            props.category[0].toUpperCase() +
+            props.category.substring(1) +
+            " News"}
+        </h1>
+        {!loading && <Spinner />}
+        <div className="row">
+          {articles.map((news) => {
+            return (
+              <div className="col-md-4" key={news.id}>
+                <NewsItem
+                  title={news.title.slice(0, 58)}
+                  description={news.content.slice(0, 100)}
+                  imageUrl={news.imageUrl}
+                  newsUrl={!news.readMoreUrl ? news.url : news.readMoreUrl}
+                  author={news.author}
+                  publishedDate={news.date.slice(0, news.date.indexOf(","))}
+                 publishedTime={news.time}
+                />
+              </div>
+            );
+          })}
         </div>
-        {this.state.loading && <Footer />}
       </div>
-    );
-  }
+      {loading && <Footer />}
+    </div>
+  );
 }
 
 export default News;
